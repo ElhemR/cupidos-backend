@@ -7,7 +7,7 @@ const relationshipSchema = new mongoose.Schema({
             user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Reference to the user
             communication: { type: Number, default: 5 },
             emotionalSupport: { type: Number, default: 5 },
-            intimacy: { type: Number, default: 5 },
+            trust: { type: Number, default: 5 },
             qualityTime: { type: Number, default: 5 },
             sex: { type: Number, default: 5 },
             dreams: { type: Number, default: 5 },

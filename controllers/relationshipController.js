@@ -44,7 +44,7 @@ exports.assignPartner = async (req, res) => {
                     user: user._id,
                     communication: 5,
                     emotionalSupport: 5,
-                    intimacy: 5,
+                    trust: 5,
                     sex: 5,
                     qualityTime: 5,
                     dreams: 5,
@@ -54,7 +54,7 @@ exports.assignPartner = async (req, res) => {
                     user: partner._id,
                     communication: 5,
                     emotionalSupport: 5,
-                    intimacy: 5,
+                    trust: 5,
                     sex: 5,
                     qualityTime: 5,
                     dreams: 5,
@@ -73,7 +73,62 @@ exports.assignPartner = async (req, res) => {
     }
 };
 
+exports.getRelationships = async (req, res) => {
+    // Extract the token and decode it to get the user ID
+    const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1];
+    if (!token) {
+        return res.status(401).json({ msg: 'No token provided' });
+    }
 
+    const decodedToken = jwt.decode(token, { complete: true });
+    const userId = decodedToken.payload.userId;
+
+    try {
+        // Find all relationships where the user is part of
+        const relationships = await Relationship.find({
+            users: userId
+        }).populate('users'); // Populate the users field to get partner details
+
+        if (!relationships || relationships.length === 0) {
+            return res.status(400).json({ msg: 'No relationships found for the user' });
+        }
+
+        // Create an array to store relationship information
+        const relationshipData = relationships.map(relationship => {
+            // Find the user's own sliders
+            const userSliders = relationship.sliders.find(slider => slider.user.toString() === userId);
+
+            // Find the partner (assuming it's a 2-user relationship, or the others in a polyamorous setup)
+            const partners = relationship.users.filter(user => user._id.toString() !== userId);
+
+            // Map the partner data with their slider values
+            const partnerData = partners.map(partner => {
+                const partnerSliders = relationship.sliders.find(slider => slider.user.toString() === partner._id.toString());
+
+                return {
+                    partnerName: partner.username,
+                    partnerSliders: partnerSliders || {}
+                };
+            });
+
+            // Return the relationship details with user's and partner's sliders
+            return {
+                relationshipId: relationship._id,
+                userSliders: userSliders || {},
+                partners: partnerData
+            };
+        });
+
+        // Respond with the relationships and sliders data
+        res.json({
+            msg: 'Relationships and sliders data fetched successfully',
+            relationships: relationshipData
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
 // Update sliders for a relationship
 exports.updateSliders = async (req, res) => {
     const { relationshipId, sliders } = req.body;
@@ -109,8 +164,8 @@ exports.updateSliders = async (req, res) => {
         if (sliders.emotionalSupport !== undefined) {
             userSliders.emotionalSupport = sliders.emotionalSupport;
         }
-        if (sliders.intimacy !== undefined) {
-            userSliders.intimacy = sliders.intimacy;
+        if (sliders.trust !== undefined) {
+            userSliders.trust = sliders.trust;
         }
         if (sliders.sex !== undefined) {
             userSliders.sex = sliders.sex;
