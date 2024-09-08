@@ -10,7 +10,7 @@ const relationshipSchema = new mongoose.Schema({
             trust: { type: Number, default: 5 },
             qualityTime: { type: Number, default: 5 },
             sex: { type: Number, default: 5 },
-            dreams: { type: Number, default: 5 },
+            harmony: { type: Number, default: 5 },
             futurePlans: { type: Number, default: 5 }
         }
     ]

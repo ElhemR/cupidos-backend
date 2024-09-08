@@ -47,7 +47,7 @@ exports.assignPartner = async (req, res) => {
                     trust: 5,
                     sex: 5,
                     qualityTime: 5,
-                    dreams: 5,
+                    harmony: 5,
                     futurePlans: 5
                 },
                 {
@@ -57,7 +57,7 @@ exports.assignPartner = async (req, res) => {
                     trust: 5,
                     sex: 5,
                     qualityTime: 5,
-                    dreams: 5,
+                    harmony: 5,
                     futurePlans: 5
                 }
             ]
@@ -173,8 +173,8 @@ exports.updateSliders = async (req, res) => {
         if (sliders.qualityTime !== undefined) {
             userSliders.qualityTime = sliders.qualityTime;
         }
-        if (sliders.dreams !== undefined) {
-            userSliders.dreams = sliders.dreams;
+        if (sliders.harmony !== undefined) {
+            userSliders.harmony = sliders.harmony;
         }
         if (sliders.futurePlans !== undefined) {
             userSliders.futurePlans = sliders.futurePlans;
