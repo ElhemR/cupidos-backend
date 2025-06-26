@@ -7,6 +7,7 @@ dotenv.config();
 // Import routes
 const authRoutes = require('./routes/authRoutes');
 const relationshipRoutes = require('./routes/relationshipRoutes');
+const invitationRoutes = require('./routes/invitationRoutes');
 
 const app = express();
 
@@ -17,7 +18,7 @@ app.use(express.json());
 // Use routes
 app.use('/api/auth', authRoutes);
 app.use('/api/relationships', relationshipRoutes);
-
+app.use('/api/invitations', invitationRoutes);
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true,  serverSelectionTimeoutMS: 50000,  // Adjust as needed (default is 30 seconds)
     socketTimeoutMS: 45000, })
