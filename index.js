@@ -12,7 +12,15 @@ const invitationRoutes = require('./routes/invitationRoutes');
 const app = express();
 
 // Middleware
-app.use(cors());
+
+// CORS Setup
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+app.options('*', cors()); // allow preflight requests
+
 app.use(express.json());
 
 // Use routes
